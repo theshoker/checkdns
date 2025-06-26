@@ -12,11 +12,11 @@ if ! dig -v >/dev/null 2>&1; then
 fi
 
 dns_query() {
-    local protocol="$1"
-    local resolver_name="$2"
-    local resolver_host="$3"
+    protocol="$1"
+    resolver_name="$2"
+    resolver_host="$3"
     
-    local result=$(dig +${protocol} +time=3 +tries=1 @"$resolver_host" "$DOMAIN" A 2>&1)
+    result=$(dig +${protocol} +time=3 +tries=1 @"$resolver_host" "$DOMAIN" A 2>&1)
 
     if echo "$result" | grep -q "failed:\|timed out\|no servers could be reached\|connection refused\|host unreachable"; then
         echo "  ❌ $resolver_name"
@@ -24,7 +24,7 @@ dns_query() {
         return
     fi
 
-    local ip_lines=$(echo "$result" | grep -E '^([0-9]{1,3}\.){3}[0-9]{1,3}$' || true)
+    ip_lines=$(echo "$result" | grep -E '^([0-9]{1,3}\.){3}[0-9]{1,3}$' || true)
 
     query_time=$(echo "$result" | grep "Query time:" | sed 's/.*Query time: \([0-9]*\) msec.*/\1/')
 
