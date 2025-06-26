@@ -44,10 +44,21 @@ dns_query() {
     fi
 }
 
+RESOLVERS_UDP="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:94.140.14.14 NextDNS:45.90.28.65"
+
 RESOLVERS_DOH="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard-dns.com NextDNS:dns.nextdns.io"
 
 RESOLVERS_DOT="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard-dns.com NextDNS:dns.nextdns.io"
 
+echo "🔓 Plain DNS (UDP)"
+
+for resolver in $RESOLVERS_UDP; do
+    name=${resolver%%:*}
+    host=${resolver#*:}
+    dns_query "notcp" "$name" "$host"
+done
+
+echo ""
 echo "🔒 DNS over HTTPS (DoH)"
 
 for resolver in $RESOLVERS_DOH; do
