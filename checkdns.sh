@@ -8,6 +8,8 @@ if ! command -v dig >/dev/null 2>&1; then
     echo "dig is not installed. Commands to install:"
     echo "Debian/Ubuntu: sudo apt install dnsutils"
     echo "OpenWrt: opkg install bind-dig"
+    echo "MacOS: brew install bind"
+    echo "Termux: apt upgrade dnsutils"
     exit 1
 fi
 

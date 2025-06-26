@@ -35,6 +35,8 @@ chmod +x checkdns.sh
 ### Installation commands for dig:
 - **Debian/Ubuntu**: `sudo apt install dnsutils`
 - **OpenWrt**: `opkg install bind-dig`
+- **MacOS**: `brew install bind`
+- **Termux**" `apt upgrade dnsutils`
 
 ## Output Example
 
