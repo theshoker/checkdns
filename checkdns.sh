@@ -34,9 +34,9 @@ dns_query() {
     fi
 }
 
-RESOLVERS_DOH="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard.com NextDNS:dns.nextdns.io"
+RESOLVERS_DOH="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard-dns.com NextDNS:dns.nextdns.io"
 
-RESOLVERS_DOT="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard.com NextDNS:dns.nextdns.io"
+RESOLVERS_DOT="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard-dns.com NextDNS:dns.nextdns.io"
 
 echo "🔒 DNS over HTTPS (DoH)"
 
