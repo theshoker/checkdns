@@ -16,7 +16,7 @@ dns_query() {
     resolver_name="$2"
     resolver_host="$3"
     
-    result=$(timeout 3 dig +${protocol} +tries=1 @"$resolver_host" "$DOMAIN" A 2>&1)
+    result=$(dig +${protocol} +tries=1 +time=3 @"$resolver_host" "$DOMAIN" A 2>&1)
 
     if echo "$result" | grep -q "failed:\|timed out\|no servers could be reached\|connection refused\|host unreachable"; then
         echo "  ❌ $resolver_name"
