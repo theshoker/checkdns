@@ -1,11 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
 DOMAIN="${1:-itdog.info}"
 
-if ! command -v dig &> /dev/null
-then
+if ! dig -v >/dev/null 2>&1; then
     echo "dig is not installed. Commands to install:"
     echo "Debian/Ubuntu: sudo apt install dnsutils"
     echo "OpenWrt: opkg install bind-dig"
@@ -35,25 +34,13 @@ dns_query() {
     fi
 }
 
-RESOLVERS_DOH=(
-    "Cloudflare:1.1.1.1"
-    "Google:8.8.8.8"
-    "Quad9:9.9.9.9"
-    "AdGuardDNS:dns.adguard.com"
-    "NextDNS:dns.nextdns.io"
-)
+RESOLVERS_DOH="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard.com NextDNS:dns.nextdns.io"
 
-RESOLVERS_DOT=(
-    "Cloudflare:1.1.1.1"
-    "Google:8.8.8.8"
-    "Quad9:9.9.9.9"
-    "AdGuardDNS:dns.adguard.com"
-    "NextDNS:dns.nextdns.io"
-)
+RESOLVERS_DOT="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard.com NextDNS:dns.nextdns.io"
 
 echo "🔒 DNS over HTTPS (DoH)"
 
-for resolver in "${RESOLVERS_DOH[@]}"; do
+for resolver in $RESOLVERS_DOH; do
     name=${resolver%%:*}
     host=${resolver#*:}
     dns_query "https" "$name" "$host"
@@ -62,7 +49,7 @@ done
 echo ""
 echo "🔒 DNS over TLS (DoT)"
 
-for resolver in "${RESOLVERS_DOT[@]}"; do
+for resolver in $RESOLVERS_DOT; do
     name=${resolver%%:*}
     host=${resolver#*:}
     dns_query "tls" "$name" "$host"
