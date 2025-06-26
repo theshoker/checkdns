@@ -16,21 +16,33 @@ dns_query() {
     local resolver_name="$2"
     local resolver_host="$3"
     
-    local result=$(dig +short +${protocol} +time=3 +tries=1 @"$resolver_host" "$DOMAIN" A 2>&1)
+    local result=$(dig +${protocol} +time=3 +tries=1 @"$resolver_host" "$DOMAIN" A 2>&1)
 
-    if echo "$result" | grep -q "failed:\|timed out\|no servers could be reached\|connection refused"; then
+    if echo "$result" | grep -q "failed:\|timed out\|no servers could be reached\|connection refused\|host unreachable"; then
         echo "  ❌ $resolver_name"
-        echo "$result" | grep -E "(failed:|timed out|no servers|connection)" | sed 's/^/    /'
+        echo "$result" | grep -E "(failed:|timed out|no servers|connection|unreachable)" | sed 's/^/    /'
         return
     fi
 
     local ip_lines=$(echo "$result" | grep -E '^([0-9]{1,3}\.){3}[0-9]{1,3}$' || true)
 
+    query_time=$(echo "$result" | grep "Query time:" | sed 's/.*Query time: \([0-9]*\) msec.*/\1/')
+
+    ip_lines=$(echo "$result" | grep -A 10 "ANSWER SECTION:" | grep -E "IN[[:space:]]+A[[:space:]]+([0-9]{1,3}\.){3}[0-9]{1,3}" || echo "")
+
     if [ -n "$ip_lines" ]; then
-        echo "  ✅ $resolver_name"
+        if [ -n "$query_time" ]; then
+            echo "  ✅ $resolver_name ($query_time ms)"
+        else
+            echo "  ✅ $resolver_name"
+        fi
     else
-        echo "  ❌ $resolver_name"
-        echo "$result" | grep -v '^$' | sed 's/^/    /'
+        if [ -n "$query_time" ]; then
+            echo "  ❌ $resolver_name ($query_time ms)"
+        else
+            echo "  ❌ $resolver_name"
+        fi
+        echo "$result" | grep -v '^$' | grep -v '^;' | sed 's/^/    /'
     fi
 }
 
