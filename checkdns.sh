@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eu
+#set -x
 
 DOMAIN="${1:-itdog.info}"
 
@@ -16,7 +16,7 @@ dns_query() {
     resolver_name="$2"
     resolver_host="$3"
     
-    result=$(dig +${protocol} +time=3 +tries=1 @"$resolver_host" "$DOMAIN" A 2>&1)
+    result=$(timeout 3 dig +${protocol} +tries=1 @"$resolver_host" "$DOMAIN" A 2>&1)
 
     if echo "$result" | grep -q "failed:\|timed out\|no servers could be reached\|connection refused\|host unreachable"; then
         echo "  ❌ $resolver_name"
@@ -24,11 +24,9 @@ dns_query() {
         return
     fi
 
-    ip_lines=$(echo "$result" | grep -E '^([0-9]{1,3}\.){3}[0-9]{1,3}$' || true)
-
     query_time=$(echo "$result" | grep "Query time:" | sed 's/.*Query time: \([0-9]*\) msec.*/\1/')
 
-    ip_lines=$(echo "$result" | grep -A 10 "ANSWER SECTION:" | grep -E "IN[[:space:]]+A[[:space:]]+([0-9]{1,3}\.){3}[0-9]{1,3}" || echo "")
+    ip_lines=$(echo "$result" | grep -A 10 "ANSWER SECTION:" | grep -E "IN[[:space:]]+A[[:space:]]+([0-9]{1,3}\.){3}[0-9]{1,3}")
 
     if [ -n "$ip_lines" ]; then
         if [ -n "$query_time" ]; then
