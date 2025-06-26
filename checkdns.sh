@@ -4,7 +4,7 @@
 
 DOMAIN="${1:-itdog.info}"
 
-if ! dig -v >/dev/null 2>&1; then
+if ! command -v dig >/dev/null 2>&1; then
     echo "dig is not installed. Commands to install:"
     echo "Debian/Ubuntu: sudo apt install dnsutils"
     echo "OpenWrt: opkg install bind-dig"
