@@ -50,12 +50,10 @@ RESOLVERS_UDP="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:94.140
 Freedom:80.244.40.40"
 
 RESOLVERS_DOH="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard-dns.com NextDNS:dns.nextdns.io
-Yandex:common.dot.dns.yandex.net
-Freedom:80.244.40.40"
+Yandex:common.dot.dns.yandex.net"
 
 RESOLVERS_DOT="Cloudflare:1.1.1.1 Google:8.8.8.8 Quad9:9.9.9.9 AdGuardDNS:dns.adguard-dns.com NextDNS:dns.nextdns.io
-Yandex:common.dot.dns.yandex.net
-Freedom:80.244.40.40"
+Yandex:common.dot.dns.yandex.net"
 
 echo "🔓 Plain DNS (UDP)"
 
